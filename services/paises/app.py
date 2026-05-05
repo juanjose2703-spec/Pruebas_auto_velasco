@@ -6,42 +6,42 @@ api = Api(programa)
 
 class ListaPaises(Resource):
     def get(self):
-        paises = mis_usuarios.listar()
-        return jsonify({"mensaje": "usuarios","data": usuarios})
+        paises = mis_paises.listar()
+        return jsonify({"mensaje": "paises","data": paises})
     def post(self):
         nuevo=request.json
-        resultado = mis_usuarios.consultar(nuevo["id"])
+        resultado = mis_paises.consultar(nuevo["idPais"])
         if len(resultado)==0:
-            mis_usuarios.agregar(nuevo["id"],nuevo["nombre"],nuevo["contrasena"])
-            return jsonify({"mensaje":"Usuario agregado con éxito"})
+            mis_paises.agregar(nuevo["idPais"],nuevo["nombre"],nuevo["continente"])
+            return jsonify({"mensaje":"Pais agregado con éxito"})
         else:
-            return jsonify({"mensaje":"Id de usuario ya existe"})
+            return jsonify({"mensaje":"Id de pais ya existe"})
 
-class Usuario(Resource):
-    def get(self,id):
-        resultado = mis_usuarios.consultar(id)
+class Pais(Resource):
+    def get(self,idPais):
+        resultado = mis_paises.consultar(idPais)
         if len(resultado)==0:
-            return jsonify({"mensaje":"Usuario no encontrado"})
+            return jsonify({"mensaje":"Pais no encontrado"})
         else:
-            return jsonify({"mensaje":"Usuario encontrado","usuario":resultado[0]})
-    def put(self,id):
+            return jsonify({"mensaje":"Pais encontrado","Pais":resultado[0]})
+    def put(self,idPais):
         nuevo=request.json
-        resultado = mis_usuarios.consultar(id)
+        resultado = mis_paises.consultar(idPais)
         if len(resultado)==0:
-            return jsonify({"mensaje":"Usuario no existe"})
+            return jsonify({"mensaje":"Pais no existe"})
         else:
-            mis_usuarios.modificar(nuevo["id"],nuevo["nombre"],nuevo["contrasena"])
+            mis_paises.modificar(nuevo["idPais"],nuevo["nombre"],nuevo["continente"])
             return jsonify({"mensaje":"Usuario modificado con éxito"})
-    def delete(self,id):
-        resultado = mis_usuarios.consultar(id)
+    def delete(self,idPais):
+        resultado = mis_paises.consultar(idPais)
         if len(resultado)==0:
-            return jsonify({"mensaje":"Usuario no existe"})
+            return jsonify({"mensaje":"Pais no existe"})
         else:
-            mis_usuarios.eliminar(id)
-            return jsonify({"mensaje":"Usuario eliminado con éxito!"})
-    def post(self,id):
+            mis_paises.eliminar(idPais)
+            return jsonify({"mensaje":"Pais eliminado con éxito!"})
+    def post(self,idPais):
         nuevo=request.json
-        resultado = mis_usuarios.login(nuevo["id"],nuevo["contra"])
+        resultado = mis_paises.login(nuevo["idPais"],nuevo["contra"])
         if resultado["entra"]:
             return jsonify({"mensaje":"Bienvenido "+resultado["nombre"]})
         else:
