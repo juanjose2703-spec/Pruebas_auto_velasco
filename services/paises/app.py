@@ -16,7 +16,7 @@ class ListaPaises(Resource):
             mis_paises.agregar(nuevo["idPais"],nuevo["nombre"],nuevo["continente"])
             return jsonify({"mensaje":"Pais agregado con éxito"})
         else:
-            return jsonify({"mensaje":"Id de pais ya existe"})
+            return jsonify({"mensaje":"Id de Pais ya existe"})
 
 class Pais(Resource):
     def get(self,idPais):
