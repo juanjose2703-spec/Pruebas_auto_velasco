@@ -1,9 +1,9 @@
 """ 
-Se tendrá aquí el modelo para la gestión de usuarios,
+Se tendrá aquí el modelo para la gestión de paises,
 es decir todo aquello que tenga que ver con la persistencia
 (SQL)
 """
-from usuarios.conexion import *
+from conexion import *
 
 class Paises:
     def listar(self):
@@ -11,25 +11,27 @@ class Paises:
         mi_cursor.execute(sql)
         resultado = mi_cursor.fetchall()
         return resultado
+    
     def consultar(self, id):
         sql = f"SELECT * FROM paises WHERE idPais='{id}'"
         mi_cursor.execute(sql)
         resultado = mi_cursor.fetchall()
         return resultado
+    
     def agregar(self,id,nom,continente):
-        sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('{id}','{nom}','{continente}')"
+        sql = f"INSERT INTO paises (idPais, nombre, continente) VALUES ('{id}','{nom}','{continente}')"
         mi_cursor.execute(sql)
         mi_db.commit()
+
     def modificar(self, id, nom, continente):
         sql = f"UPDATE paises SET nombre='{nom}', continente='{continente}' WHERE idPais='{id}'"
         mi_cursor.execute(sql)
         mi_db.commit()
         return self.consultar(id)
+    
     def eliminar(self, id):
         sql = f"DELETE FROM paises WHERE idPais='{id}'"
         mi_cursor.execute(sql)
         mi_db.commit()
     
 mis_paises = Paises()
-
-#Comentario probando el github.
