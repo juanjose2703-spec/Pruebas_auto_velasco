@@ -1,5 +1,5 @@
 from conexion import *
-import pytest
+import pytest 
 
 class Test_paises:
 
@@ -27,7 +27,7 @@ class Test_paises:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"idPais":"02", "nombre":"PaisTest","continente":"Europa"},"Pais agregado con éxito"),
-         ({"idPais":"01", "nombre":"PaisPrueba", "continente":"America"},"Id de Pais ya existe")]
+        ({"idPais":"01", "nombre":"PaisPrueba", "continente":"America"},"Id de Pais ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
