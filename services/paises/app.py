@@ -41,7 +41,7 @@ class Pais(Resource):
             return jsonify({"mensaje":"Pais no existe"})
         else:
             mis_paises.eliminar(idPais)
-            return jsonify({"mensaje":"Pais eliminado con éxito!"})
+            return jsonify({"mensaje":"Pais eliminado con éxito"})
     
 api.add_resource(ListaPaises, "/paises")
 api.add_resource(Pais,"/paises/<idPais>")

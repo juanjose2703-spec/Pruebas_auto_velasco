@@ -7,17 +7,17 @@ class Test_paises:
     def setup_class(self):
         self.url = "http://localhost:5081/paises"
 
-        id = "01"
-        nombre = "PaisPrueba"
-        continente = "America"
+        sql = "DELETE FROM paises WHERE idPais='01'"
+        mi_cursor.execute(sql)
+        mi_db.commit()
 
-        sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('{id}','{nombre}','{continente}')"
+        sql = "INSERT INTO paises (idpais,nombre,continente) VALUES ('01','PaisPrueba','America')"
         mi_cursor.execute(sql)
         mi_db.commit()
 
     def teardown_class(self):
-        sql = "DELETE FROM paises WHERE idPais IN ('01','02')"
-        mi_cursor.execute(sql)
+        mi_cursor.execute("DELETE FROM paises WHERE idPais='01'")
+        mi_cursor.execute("DELETE FROM paises WHERE idPais='02'")
         mi_db.commit()
 
     def test_lista_paises(self):
@@ -31,20 +31,20 @@ class Test_paises:
         ["nuevo_entrada","esperado_entrada"],
         [
             ({"idPais":"02", "nombre":"PaisTest","continente":"Europa"}, "Pais agregado con éxito"),
-            ({"idPais":"01", "nombre":"PaisPrueba","continente":"America"}, "Id de Pais ya existe")
+            ({"idPais":"01", "nombre":"PaisPrueba", "continente":"America"}, "Id de Pais ya existe")
         ]
     )
     def test_agregar(self, nuevo_entrada, esperado_entrada):
         calculado = requests.post(self.url, json=nuevo_entrada)
 
         assert calculado.status_code == 200
-        assert esperado_entrada == calculado.json()["mensaje"]
+        assert calculado.json()["mensaje"] == esperado_entrada
 
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [
             ("01","Pais encontrado"),
-            ("03","Pais no encontrado")
+            ("03","Pais no encontrado"),
         ]
     )
     def test_busqueda(self, id_entrada, esperado_entrada):
@@ -55,7 +55,7 @@ class Test_paises:
 
     def test_modifica1(self):
         id = "01"
-        nuevo = {"idPais":id, "nombre":"PaisModificado","continente":"Asia"}
+        nuevo = {"idPais":id,"nombre":"PaisPruebaModificado", "continente":"Asia"}
         esperado = "Pais modificado con éxito"
 
         calculado = requests.put(f"{self.url}/{id}", json=nuevo)
@@ -67,11 +67,11 @@ class Test_paises:
         mi_cursor.execute(sql)
         datos = mi_cursor.fetchall()[0]
 
-        assert datos[1] == "PaisModificado" and datos[2] == "Asia"
+        assert datos[1] == "PaisPruebaModificado" and datos[2] == "Asia"
 
     def test_modifica2(self):
         id = "99"
-        nuevo = {"idPais":id, "nombre":"Inexistente","continente":"Oceania"}
+        nuevo = {"idPais":id, "nombre": "Inexistente", "continente":"Oceania"}
         esperado = "Pais no existe"
 
         calculado = requests.put(f"{self.url}/{id}", json=nuevo)
@@ -83,7 +83,7 @@ class Test_paises:
         ["id_entrada","esperado_entrada"],
         [
             ("02","Pais eliminado con éxito"),
-            ("99","Pais no existe")
+            ("03","Pais no existe")
         ]
     )
     def test_elimina(self, id_entrada, esperado_entrada):
