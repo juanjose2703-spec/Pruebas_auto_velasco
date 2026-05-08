@@ -6,22 +6,23 @@ class Test_autores:
     def setup_class(self):
         # Preparación del entorno de las pruebas
         self.url = "http://localhost:5082/autores"
-        sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('CO','Colombia','America')"
+        # Insertar pais propio para las pruebas de autores
+        sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('MX','Mexico','America')"
         mi_cursor.execute(sql)
         mi_db.commit()
         id = "autor001"
         nombre = "Gabriel Garcia"
         email = "gabriel@test.com"
-        idPais = "CO"
+        idPais = "MX"
         sql = f"INSERT INTO autores (idAutor,nombre,email,idPais) VALUES ('{id}','{nombre}','{email}','{idPais}')"
         mi_cursor.execute(sql)
         mi_db.commit()
 
     def teardown_class(self):
         # Limpia la base de datos
-        sql = f"DELETE FROM autores WHERE idAutor='autor001'"
+        sql = f"DELETE FROM autores WHERE idAutor IN ('autor001','autor002')"
         mi_cursor.execute(sql)
-        sql = f"DELETE FROM paises WHERE idPais='CO'"
+        sql = f"DELETE FROM paises WHERE idPais='MX'"
         mi_cursor.execute(sql)
         mi_db.commit()
 
@@ -35,8 +36,8 @@ class Test_autores:
 
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
-        [({"idAutor":"autor002", "nombre":"Andres Caicedo","email":"andres@test.com","idPais":"CO"},"Autor agregado con éxito"),
-         ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"CO"},"Id de autor ya existe")]
+        [({"idAutor":"autor002", "nombre":"Andres Caicedo","email":"andres@test.com","idPais":"MX"},"Autor agregado con éxito"),
+         ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
@@ -64,7 +65,7 @@ class Test_autores:
         id = "autor001"
         nombre = "Gabriel Garcia Modificado"
         email = "gabriel_mod@test.com"
-        idPais = "CO"
+        idPais = "MX"
         nuevo = {"idAutor":id, "nombre":nombre, "email":email, "idPais":idPais}
         esperado = "Autor modificado con éxito"
         # Ejecutar la prueba
@@ -82,7 +83,7 @@ class Test_autores:
         id = "autor999"
         nombre = "Autor Inexistente"
         email = "noexiste@test.com"
-        idPais = "CO"
+        idPais = "MX"
         nuevo = {"idAutor":id, "nombre":nombre, "email":email, "idPais":idPais}
         esperado = "Autor no existe"
         # Ejecutar la prueba

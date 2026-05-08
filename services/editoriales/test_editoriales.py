@@ -1,28 +1,33 @@
 from conexion import *
 import pytest
 
-class Test_paises:
+class Test_editoriales:
 
     def setup_class(self):
         # Preparación del entorno de las pruebas
-        self.url = "http://localhost:5081/paises"
-        id = "CO"
-        nombre = "Colombia"
-        continente = "America"
-        sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('{id}','{nombre}','{continente}')"
+        self.url = "http://localhost:5083/editoriales"
+        # Limpiar por si quedaron datos de corridas anteriores
+        mi_cursor.execute(f"DELETE FROM editoriales WHERE idEditorial IN ('ed001','ed002')")
+        mi_cursor.execute(f"DELETE FROM paises WHERE idPais='ES'")
+        mi_db.commit()
+        # Insertar pais propio para las pruebas de editoriales
+        mi_cursor.execute(f"INSERT INTO paises (idPais,nombre,continente) VALUES ('ES','España','Europa')")
+        mi_db.commit()
+        id = "ed001"
+        nombre = "Planeta Editorial"
+        idPais = "ES"
+        sql = f"INSERT INTO editoriales (idEditorial,nombre,idPais) VALUES ('{id}','{nombre}','{idPais}')"
         mi_cursor.execute(sql)
         mi_db.commit()
 
     def teardown_class(self):
         # Limpia la base de datos
-        sql = f"DELETE FROM paises WHERE idPais='CO'"
-        mi_cursor.execute(sql)
-        sql = f"DELETE FROM paises WHERE idPais='AR'"
-        mi_cursor.execute(sql)
+        mi_cursor.execute(f"DELETE FROM editoriales WHERE idEditorial IN ('ed001','ed002')")
+        mi_cursor.execute(f"DELETE FROM paises WHERE idPais='ES'")
         mi_db.commit()
 
-    def test_lista_paises(self):
-        esperado = "paises"
+    def test_lista_editoriales(self):
+        esperado = "editoriales"
         # Ejecutar la prueba
         calculado = requests.get(self.url)
         # Verificación
@@ -31,8 +36,8 @@ class Test_paises:
 
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
-        [({"idPais":"AR", "nombre":"Argentina","continente":"America"},"Pais agregado con éxito"),
-         ({"idPais":"CO", "nombre":"Colombia","continente":"America"},"Id de Pais ya existe")]
+        [({"idEditorial":"ed002", "nombre":"Norma Editorial","idPais":"ES"},"Editorial agregada con éxito"),
+         ({"idEditorial":"ed001", "nombre":"Planeta Editorial","idPais":"ES"},"Id de editorial ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
@@ -43,8 +48,8 @@ class Test_paises:
 
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
-        [("CO","Pais encontrado"),
-         ("VE","Pais no encontrado")]
+        [("ed001","Editorial encontrada"),
+         ("ed099","Editorial no encontrada")]
     )
     def test_busqueda(self,id_entrada,esperado_entrada):
         id = id_entrada
@@ -55,30 +60,30 @@ class Test_paises:
         assert calculado.status_code == 200
         assert esperado in calculado.json()["mensaje"]
 
-    # Para cuando el pais existe y se modifica con éxito
+    # Para cuando la editorial existe y se modifica con éxito
     def test_modifica1(self):
-        id = "CO"
-        nombre = "Colombia Modificado"
-        continente = "America del Sur"
-        nuevo = {"idPais":id, "nombre":nombre, "continente":continente}
-        esperado = "Pais modificado con éxito"
+        id = "ed001"
+        nombre = "Planeta Editorial Modificada"
+        idPais = "ES"
+        nuevo = {"idEditorial":id, "nombre":nombre, "idPais":idPais}
+        esperado = "Editorial modificada con éxito"
         # Ejecutar la prueba
         calculado = requests.put(f"{self.url}/{id}",json=nuevo)
         # Verificar la prueba
         assert calculado.status_code == 200
         assert esperado in calculado.json()["mensaje"]
-        sql =f"SELECT * FROM paises WHERE idPais='{id}'"
+        sql =f"SELECT * FROM editoriales WHERE idEditorial='{id}'"
         mi_cursor.execute(sql)
         datos = mi_cursor.fetchall()[0]
-        assert nombre==datos[1] and continente==datos[2]
+        assert nombre==datos[1]
 
-# Para cuando el pais no existe
+# Para cuando la editorial no existe
     def test_modifica2(self):
-        id = "VE"
-        nombre = "Venezuela"
-        continente = "America"
-        nuevo = {"idPais":id, "nombre":nombre, "continente":continente}
-        esperado = "Pais no existe"
+        id = "ed099"
+        nombre = "Editorial Inexistente"
+        idPais = "ES"
+        nuevo = {"idEditorial":id, "nombre":nombre, "idPais":idPais}
+        esperado = "Editorial no existe"
         # Ejecutar la prueba
         calculado = requests.put(f"{self.url}/{id}",json=nuevo)
         # Verificar la prueba
@@ -87,8 +92,8 @@ class Test_paises:
 
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
-        [("AR","Pais eliminado con éxito"),
-         ("VE","Pais no existe")]
+        [("ed002","Editorial eliminada con éxito"),
+         ("ed099","Editorial no existe")]
     )
     def test_elimina(self,id_entrada, esperado_entrada):
         id = id_entrada
@@ -99,7 +104,7 @@ class Test_paises:
         assert calculado.status_code == 200
         assert esperado in calculado.json()["mensaje"]
         mi_db.commit()
-        sql =f"SELECT * FROM paises WHERE idPais='{id}'"
+        sql =f"SELECT * FROM editoriales WHERE idEditorial='{id}'"
         mi_cursor.execute(sql)
         datos = mi_cursor.fetchall()
         assert len(datos)==0
