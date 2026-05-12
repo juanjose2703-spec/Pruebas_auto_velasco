@@ -32,7 +32,7 @@ class Test_paises:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"idPais":"AR", "nombre":"Argentina","continente":"America"},"Pais agregado con éxito"),
-         ({"idPais":"CO", "nombre":"Colombia","continente":"America"},"Id de Pais ya existe")]
+        ({"idPais":"CO", "nombre":"Colombia","continente":"America"},"Id de Pais ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
@@ -44,7 +44,7 @@ class Test_paises:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("CO","Pais encontrado"),
-         ("VE","Pais no encontrado")]
+        ("VE","Pais no encontrado")]
     )
     def test_busqueda(self,id_entrada,esperado_entrada):
         id = id_entrada
@@ -88,7 +88,7 @@ class Test_paises:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("AR","Pais eliminado con éxito"),
-         ("VE","Pais no existe")]
+        ("VE","Pais no existe")]
     )
     def test_elimina(self,id_entrada, esperado_entrada):
         id = id_entrada
