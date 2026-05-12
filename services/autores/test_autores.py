@@ -7,6 +7,9 @@ class Test_autores:
         # Preparación del entorno de las pruebas
         self.url = "http://localhost:5082/autores"
         # Insertar pais propio para las pruebas de autores
+        mi_cursor.execute("DELETE FROM autores WHERE idAutor IN ('autor001','autor002')")
+        mi_cursor.execute("DELETE FROM paises WHERE idPais='MX'")
+        mi_db.commit()
         sql = f"INSERT INTO paises (idPais,nombre,continente) VALUES ('MX','Mexico','America')"
         mi_cursor.execute(sql)
         mi_db.commit()
