@@ -30,7 +30,7 @@ class Test_usuarios:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"id":"test2026", "nombre":"Usuario Pruebas","contrasena":"6666"},"Usuario agregado con éxito"),
-         ({"id":"final881", "nombre":"Fidel Nalisco", "contrasena":"1111"},"Id de usuario ya existe")]
+        ({"id":"final881", "nombre":"Fidel Nalisco", "contrasena":"1111"},"Id de usuario ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         contra = hashlib.sha512(nuevo_entrada["contrasena"].encode("UTF-8")).hexdigest()
@@ -49,8 +49,8 @@ class Test_usuarios:
     @pytest.mark.parametrize(
         ["id_entrada","contra_entrada","esperado_entrada"],
         [("final881","4321",{"mensaje":"Bienvenido Fidel Nalisco"}),
-         ("final881","1234",{"mensaje":"Credenciales inválidas"}),
-         ("118final","hgtr",{"mensaje":"Credenciales inválidas"})]
+        ("final881","1234",{"mensaje":"Credenciales inválidas"}),
+        ("118final","hgtr",{"mensaje":"Credenciales inválidas"})]
     )
     def test_login(self,id_entrada,contra_entrada,esperado_entrada):
         id = id_entrada
@@ -66,7 +66,7 @@ class Test_usuarios:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("final881","Usuario encontrado"),
-         ("118final","Usuario no encontrado")]
+        ("118final","Usuario no encontrado")]
     )
     def test_busqueda(self,id_entrada,esperado_entrada):
         id = id_entrada
@@ -110,7 +110,7 @@ class Test_usuarios:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("test2026","Usuario eliminado con éxito!"),
-         ("testfail","Usuario no existe")]
+        ("testfail","Usuario no existe")]
     )
     def test_elimina(self,id_entrada, esperado_entrada):
         id = id_entrada
