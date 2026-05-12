@@ -40,7 +40,7 @@ class Test_autores:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"idAutor":"autor002", "nombre":"Andres Caicedo","email":"andres@test.com","idPais":"MX"},"Autor agregado con éxito"),
-         ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe")]
+        ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
@@ -52,7 +52,7 @@ class Test_autores:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("autor001","Autor encontrado"),
-         ("autor999","Autor no encontrado")]
+        ("autor999","Autor no encontrado")]
     )
     def test_busqueda(self,id_entrada,esperado_entrada):
         id = id_entrada
@@ -98,7 +98,7 @@ class Test_autores:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("autor002","Autor eliminado con éxito"),
-         ("autor999","Autor no existe")]
+        ("autor999","Autor no existe")]
     )
     def test_elimina(self,id_entrada, esperado_entrada):
         id = id_entrada

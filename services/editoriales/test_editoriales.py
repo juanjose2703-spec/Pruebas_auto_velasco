@@ -37,7 +37,7 @@ class Test_editoriales:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"idEditorial":"ed002", "nombre":"Norma Editorial","idPais":"ES"},"Editorial agregada con éxito"),
-         ({"idEditorial":"ed001", "nombre":"Planeta Editorial","idPais":"ES"},"Id de editorial ya existe")]
+        ({"idEditorial":"ed001", "nombre":"Planeta Editorial","idPais":"ES"},"Id de editorial ya existe")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
@@ -49,7 +49,7 @@ class Test_editoriales:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("ed001","Editorial encontrada"),
-         ("ed099","Editorial no encontrada")]
+        ("ed099","Editorial no encontrada")]
     )
     def test_busqueda(self,id_entrada,esperado_entrada):
         id = id_entrada
@@ -93,7 +93,7 @@ class Test_editoriales:
     @pytest.mark.parametrize(
         ["id_entrada","esperado_entrada"],
         [("ed002","Editorial eliminada con éxito"),
-         ("ed099","Editorial no existe")]
+        ("ed099","Editorial no existe")]
     )
     def test_elimina(self,id_entrada, esperado_entrada):
         id = id_entrada
@@ -104,7 +104,7 @@ class Test_editoriales:
         assert calculado.status_code == 200
         assert esperado in calculado.json()["mensaje"]
         mi_db.commit()
-        sql =f"SELECT * FROM editoriales WHERE idEditorial='{id}'"
+        sql = f"SELECT * FROM editoriales WHERE idEditorial='{id}'"
         mi_cursor.execute(sql)
         datos = mi_cursor.fetchall()
         assert len(datos)==0
