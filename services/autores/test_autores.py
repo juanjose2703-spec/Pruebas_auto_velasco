@@ -40,7 +40,8 @@ class Test_autores:
     @pytest.mark.parametrize(
         ["nuevo_entrada","esperado_entrada"],
         [({"idAutor":"autor002", "nombre":"Andres Caicedo","email":"andres@test.com","idPais":"MX"},"Autor agregado con éxito"),
-        ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe")]
+        ({"idAutor":"autor001", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe"),
+        ({"idAutor":"autor003", "nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"VZ"},"Id de pais no existente")]
     )
     def test_agregar(self,nuevo_entrada,esperado_entrada):
         # Ejecutar la prueba
