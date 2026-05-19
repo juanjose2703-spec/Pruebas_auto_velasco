@@ -114,3 +114,20 @@ class Test_autores:
         mi_cursor.execute(sql)
         datos = mi_cursor.fetchall()
         assert len(datos)==0
+
+    @pytest.mark.parametrize(
+        ["nuevo_entrada","esperado"],
+        # Autor válido, país inexistente
+        [({"idAutor":"autor011","nombre":"Nuevo Autor","email":"nuevo@test.com","idPais":"XX"},"Id de pais no existente"),
+        # País válido, autor inexistente
+        ({"idAutor":"autor012","nombre":"Otro Autor","email":"otro@test.com","idPais":"MX"},"Autor agregado con éxito"),
+        # Ninguno válido
+        ({"idAutor":"autor013","nombre":"Fake Autor","email":"fake@test.com","idPais":"ZZ"},"Id de pais no existente"),
+        # Ambos válidos (autor ya existe con país válido)
+        ({"idAutor":"autor001","nombre":"Gabriel Garcia","email":"gabriel@test.com","idPais":"MX"},"Id de autor ya existe")]    
+    )
+        
+    def test_autores_paises(self,nuevo_entrada,esperado):
+        calculado = requests.post(self.url,json=nuevo_entrada)
+        assert calculado.status_code == 200
+        assert esperado == calculado.json()["mensaje"]
