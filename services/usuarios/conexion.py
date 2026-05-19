@@ -8,7 +8,7 @@ mi_db = mysql.connector.connect(
     host="localhost",
     port=3306,
     user="root",
-    password="",        #Se le quita la contraseña para que concuerde con cualquier bd
+    password="root",
     database="biblioteca"
 )
 mi_cursor = mi_db.cursor()
