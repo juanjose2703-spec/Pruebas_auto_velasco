@@ -1,5 +1,6 @@
 from conexion import *
 from autores import mis_autores
+from services.paises import mis_paises
 
 programa = Flask(__name__)
 api = Api(programa)
@@ -13,8 +14,12 @@ class ListaAutores(Resource):
         nuevo = request.json
         resultado = mis_autores.consultar(nuevo["idAutor"])
         if len(resultado) == 0:
-            mis_autores.agregar(nuevo["idAutor"], nuevo["nombre"], nuevo ["email"], nuevo["idPais"])
-            return jsonify ({"mensaje": "Autor agregado con éxito"})
+            resultado = mis_paises.consultar(nuevo["idPais"])
+            if len(resultado)>0:
+                mis_autores.agregar(nuevo["idAutor"], nuevo["nombre"], nuevo ["email"], nuevo["idPais"])
+                return jsonify ({"mensaje": "Autor agregado con éxito"})
+            else:
+                return jsonify({"mensaje": "Id de pais no existente"})
         else:
             return jsonify({"mensaje": "Id de autor ya existe"})
         
